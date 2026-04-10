@@ -37,4 +37,4 @@ Hiện tại, cô đã lấy chồng và sinh con nên ít hoạt động âm nh
 | Bạn bè/Đồng minh/Hợp tác        | Rapsoul, KrazyNoize, Đen Vâu, Wowy, Karik, JustaTee, Rhymastic          |
 | Đối thủ/Kẻ thù/Beef với         | không rõ                                                                |
 | D.O.B                            | 14.1.1990                                                               |
-| Thần tượng                      | Mos Def, Da Brat, Snoop Dogg, Aaliyah, Foxy Brown                      |
+| Thần tượng                      | Mos Def, Da Brat, Snoop Dogg, Aaliyah, Foxy Brown       

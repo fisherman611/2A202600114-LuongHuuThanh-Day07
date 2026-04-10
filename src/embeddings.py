@@ -2,11 +2,17 @@ from __future__ import annotations
 
 import hashlib
 import math
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+api_key = os.getenv("NVIDIA_API_KEY")
+base_url = os.getenv("NVIDIA_BASE_URL")
 
 LOCAL_EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
+OPENAI_EMBEDDING_MODEL = "nvidia/llama-nemotron-embed-1b-v2"
 EMBEDDING_PROVIDER_ENV = "EMBEDDING_PROVIDER"
-
 
 class MockEmbedder:
     """Deterministic embedding backend used by tests and default classroom runs."""
@@ -51,16 +57,17 @@ class OpenAIEmbedder:
 
         self.model_name = model_name
         self._backend_name = model_name
-        self.client = OpenAI()
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
 
     def __call__(self, text: str) -> list[float]:
-        response = self.client.embeddings.create(model=self.model_name, input=text)
+        # response = self.client.embeddings.create(model=self.model_name, input=text)
+        response = self.client.embeddings.create(
+            input=[text],
+            model=OPENAI_EMBEDDING_MODEL,
+            encoding_format="float",
+            extra_body={"input_type": "query", "truncate": "NONE"}
+        )
         return [float(value) for value in response.data[0].embedding]
 
 
 _mock_embed = MockEmbedder()
-
-try:
-    _local_embed = LocalEmbedder()
-except (ImportError, Exception):
-    _local_embed = _mock_embed

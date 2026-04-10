@@ -1,0 +1,72 @@
+Khởi tạo OpenAIEmbedder (llama-nemotron-embed-1b-v2)...
+Đã tìm thấy 12 file tài liệu.
+Đã tạo 240 chunks từ tài liệu.
+Đang embedding và lưu vào store...
+Store size: 240
+
+==================================================
+BẮT ĐẦU CHẠY BENCHMARK QUERIES
+==================================================
+
+[Câu hỏi 1] Những rapper nào đã từng là kẻ thù của ICD?
+--- Câu trả lời kỳ vọng (Gold Answer):
+    Dựa trên thông tin được cung cấp, các rapper và nhóm nhạc từng là đối thủ hoặc có mâu thuẫn (beef) với ICD bao gồm: B2C, Sol'Bass, Hades, Locoboiz, Ch...
+--- Top 3 Retrieved Chunks:
+    1. Thẩm định: 0.6288 | Nguồn: icd.md | Trích: '# ICD - Tiểu sử  ICD là 1 rapper kiêm producer chuyên nghiệp của 7LD. ...'
+    2. Thẩm định: 0.5932 | Nguồn: icd.md | Trích: 'Tuy từng gây beef khá nhiều nhưng bấy giờ khá nhiều rapper không reply ICD vì cho rằng anh chỉ đùa h...'
+    3. Thẩm định: 0.5883 | Nguồn: icd.md | Trích: 'ICD từng không nổi tiếng trong Việt Rap nói chung nhưng lại rất nổi tiếng đối với Underground vì anh...'
+
+--- RAG Agent Answer (GPT-4o-mini):
+    I cannot answer this based on the retrieved context.
+--------------------------------------------------
+
+[Câu hỏi 2] Giới thiệu về Quán quân mùa 1 của chương trình Rap Việt.
+--- Câu trả lời kỳ vọng (Gold Answer):
+    Dế Choắt (tên thật là Châu Hải Minh, sinh năm 1996) là một rapper xuất thân từ nghệ nhân xăm hình và là thành viên nổi bật của nhóm G5R, ghi dấu ấn bở...
+--- Top 3 Retrieved Chunks:
+    1. Thẩm định: 0.6898 | Nguồn: de_choat.md | Trích: 'show truyền hình này, trở thành quán quân mùa 1 của chương trình Rap Việt.  | Thông tin | Chi tiết |...'
+    2. Thẩm định: 0.5908 | Nguồn: suboi.md | Trích: 'trình Rap Việt.  | Thông tin                        | Chi tiết                                      ...'
+    3. Thẩm định: 0.5622 | Nguồn: wowy.md | Trích: 'Wowy là huấn luyện viên mùa 1 và 2 của Game show Rap Việt. ...'
+
+--- RAG Agent Answer (GPT-4o-mini):
+    Quán quân mùa 1 của chương trình **Rap Việt** là **Châu Hải Minh**.  
+- **Tên thật:** Châu Hải Minh.  
+- **Vai trò:** Đã giành chức vô địch trong mùa đầu tiên của chương trình, chứng tỏ tài năng rap và khả năng sáng tạo của mình trước khán giả và ban giám khảo.  
+
+Châu Hải Minh đã trở thành biểu tượng của thế hệ rap Việt, góp phần nâng cao chất lượng và sự đa dạng của nghệ thuật rap trong nước.
+--------------------------------------------------
+
+[Câu hỏi 3] Rapper Việt Nam từng rap cho cựu Tổng thống Barrack Obama khi ông đến thăm Việt Nam là ai?
+--- Câu trả lời kỳ vọng (Gold Answer):
+    Rapper Việt Nam từng rap cho cựu Tổng thống Barack Obama khi ông đến thăm Việt Nam là Suboi (tên thật là Hàng Lâm Trang Anh). Được mệnh danh là "Nữ ho...
+--- Top 3 Retrieved Chunks:
+    1. Thẩm định: 0.6193 | Nguồn: suboi.md | Trích: 'Cô từng rap cho Cựu Tổng thống Barrack Obama nghe khi ông ghé thăm Việt Nam  Năm 2018, Suboi được kê...'
+    2. Thẩm định: 0.5461 | Nguồn: suboi.md | Trích: 'diễn viên người Việt Nam. Cô được xem là nữ rapper đầu tiên và cũng là "Nữ hoàng nhạc hip-hop" tại V...'
+    3. Thẩm định: 0.4936 | Nguồn: suboi.md | Trích: 'trình Rap Việt.  | Thông tin                        | Chi tiết                                      ...'
+
+--- RAG Agent Answer (GPT-4o-mini):
+    Rapper Việt Nam đã rap cho cựu Tổng thống Barack Obama khi ông đến thăm Việt Nam là **Suboi**.
+--------------------------------------------------
+
+[Câu hỏi 4] Những ai là người từng ẩu đả với rapper Blacka?
+--- Câu trả lời kỳ vọng (Gold Answer):
+    Rapper Blacka (Hồ Thiên Ân) từng xảy ra ẩu đả với hai người là Young H và B Ray. Sự việc này diễn ra vào năm 2016 do mâu thuẫn giữa cả ba người, trong...
+--- Top 3 Retrieved Chunks:
+    1. Thẩm định: 0.5389 | Nguồn: blacka.md | Trích: '# Black Murder - Tiểu sử  Blacka hay Black Murder là 1 trong các rapper được cho là freestyle đỉnh n...'
+    2. Thẩm định: 0.4275 | Nguồn: blacka.md | Trích: 'Black Murder từng ẩu đả với Young H và đánh gãy mũi B Ray khi mâu thuẫn giữa cả ba diễn ra vào năm 2...'
+    3. Thẩm định: 0.3971 | Nguồn: blacka.md | Trích: 'Blacka là thành viên của G Family và giờ là trưởng nhóm Hazard Clique.  Black có tham vọng có 13 đứa...'
+
+--- RAG Agent Answer (GPT-4o-mini):
+    Những người từng ẩu đả với rapper Blacka là **Young H** và **B Ray**.
+--------------------------------------------------
+
+[Câu hỏi 5] Giới thiệu về một rapper từng học Đại Học Kiến Trúc Hà Nội.
+--- Câu trả lời kỳ vọng (Gold Answer):
+    Rapper từng tốt nghiệp trường Đại học Kiến trúc Hà Nội chính là Rhymastic (tên thật là Vũ Đức Thiện, sinh năm 1991). Anh là một nghệ sĩ đa năng trong ...
+--- Top 3 Retrieved Chunks:
+    1. Thẩm định: 0.5722 | Nguồn: suboi.md | Trích: 'diễn viên người Việt Nam. Cô được xem là nữ rapper đầu tiên và cũng là "Nữ hoàng nhạc hip-hop" tại V...'
+    2. Thẩm định: 0.5412 | Nguồn: mc_ill.md | Trích: '# MC ILL - Tiểu sử  MC ILL aka Hưng Cao là 1 rapper chuyên nghiệp tại RVP, anh cũng là host của một ...'
+    3. Thẩm định: 0.5322 | Nguồn: young_h.md | Trích: '# Young H - Tiểu sử  Young H (tên thật Nguyễn Đăng Khắc Hiếu) là rapper lâu năm trong làng Rap Việt....'
+
+--- RAG Agent Answer (GPT-4o-mini):
+    I cannot answer this based on the retrieved context.

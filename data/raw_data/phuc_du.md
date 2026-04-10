@@ -8,7 +8,7 @@ Và với khán giả đại chúng nếu chú ý một chút thì cũng sẽ bi
 
 Tháng 6 năm 2020, anh kết hợp với Bích Phương trong ca khúc "từ chối nhẹ nhàng thôi" thuộc EP "tâm trạng tan hơi chậm một chút" của Bích Phương.
 
-| Thông tin | Chi tiết|
+| Thuộc tính | Thông tin |
 |------------|----------|
 | Tên thật | Phúc Anh Trương |
 | Nghề nghiệp | Rapper<br>Songwriter |
