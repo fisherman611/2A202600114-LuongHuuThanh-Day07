@@ -59,3 +59,8 @@ class OpenAIEmbedder:
 
 
 _mock_embed = MockEmbedder()
+
+try:
+    _local_embed = LocalEmbedder()
+except (ImportError, Exception):
+    _local_embed = _mock_embed

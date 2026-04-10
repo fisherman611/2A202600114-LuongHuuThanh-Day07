@@ -1,128 +1,111 @@
-from __future__ import annotations
-
 import os
 import sys
 from pathlib import Path
-
 from dotenv import load_dotenv
 
 from src.agent import KnowledgeBaseAgent
-from src.embeddings import (
-    EMBEDDING_PROVIDER_ENV,
-    LOCAL_EMBEDDING_MODEL,
-    OPENAI_EMBEDDING_MODEL,
-    LocalEmbedder,
-    OpenAIEmbedder,
-    _mock_embed,
-)
-from src.models import Document
+from src.embeddings import LocalEmbedder
 from src.store import EmbeddingStore
 
-SAMPLE_FILES = [
-    "data/python_intro.txt",
-    "data/vector_store_notes.md",
-    "data/rag_system_design.md",
-    "data/customer_support_playbook.txt",
-    "data/chunking_experiment_report.md",
-    "data/vi_retrieval_notes.md",
-]
 
+def build_llm_fn():
+    """
+    Build a real LLM call function using the NVIDIA API.
+    NVIDIA's API is OpenAI-compatible, so we use the openai client
+    pointed at NVIDIA_BASE_URL.
+    """
+    load_dotenv()
+    
+    api_key = os.getenv("NVIDIA_API_KEY")
+    base_url = os.getenv("NVIDIA_BASE_URL")
+    model = os.getenv("NVIDIA_MODEL", "openai/gpt-oss-20b")
 
-def load_documents_from_files(file_paths: list[str]) -> list[Document]:
-    """Load documents from file paths for the manual demo."""
-    allowed_extensions = {".md", ".txt"}
-    documents: list[Document] = []
+    if not api_key:
+        print("Warning: NVIDIA_API_KEY not set. Falling back to mock LLM.")
+        return lambda prompt: f"[MOCK LLM] Prompt preview: {prompt[:100]}..."
 
-    for raw_path in file_paths:
-        path = Path(raw_path)
+    try:
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key, base_url=base_url)
 
-        if path.suffix.lower() not in allowed_extensions:
-            print(f"Skipping unsupported file type: {path} (allowed: .md, .txt)")
-            continue
-
-        if not path.exists() or not path.is_file():
-            print(f"Skipping missing file: {path}")
-            continue
-
-        content = path.read_text(encoding="utf-8")
-        documents.append(
-            Document(
-                id=path.stem,
-                content=content,
-                metadata={"source": str(path), "extension": path.suffix.lower()},
+        def llm_fn(prompt: str) -> str:
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "Bạn là trợ lý thông minh. Hãy trả lời câu hỏi dựa trên ngữ cảnh được cung cấp bằng tiếng Việt. Nếu ngữ cảnh không đủ thông tin, hãy nói thẳng điều đó."
+                    },
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.2,
+                max_tokens=512,
             )
+            return response.choices[0].message.content
+
+        print(f"LLM Backend: NVIDIA API ({model})")
+        return llm_fn
+
+    except ImportError:
+        print("Warning: openai package not installed. Falling back to mock LLM.")
+        return lambda prompt: f"[MOCK LLM] Prompt preview: {prompt[:100]}..."
+
+
+def main():
+    load_dotenv()
+
+    # Configuration
+    strategy = os.getenv("RAG_STRATEGY", "recursive")
+    persist_dir = os.getenv("CHROMA_PERSIST_DIR", "data/vector_stores/chroma_db")
+
+    print("=== Rap Viet RAG Agent ===")
+    print(f"Strategy  : {strategy}")
+    print(f"Database  : {persist_dir}")
+
+    # Initialize persistent ChromaDB store with LocalEmbedder
+    try:
+        store = EmbeddingStore(
+            collection_name=f"rap_viet_{strategy}",
+            persist_directory=persist_dir,
+            embedding_fn=LocalEmbedder()
         )
+        size = store.get_collection_size()
+        print(f"Collection: rap_viet_{strategy} ({size} chunks)")
+        if size == 0:
+            print("\n[!] Collection is empty. Please run:")
+            print("    python src/process_data.py")
+            print("    python src/index_data.py --all --use_chroma --embedder local")
+            return
+    except Exception as e:
+        print(f"Error initializing vector store: {e}")
+        return
 
-    return documents
+    # Build LLM function (NVIDIA API)
+    llm_fn = build_llm_fn()
 
+    # Setup Agent
+    agent = KnowledgeBaseAgent(store=store, llm_fn=llm_fn)
 
-def demo_llm(prompt: str) -> str:
-    """A simple mock LLM for manual RAG testing."""
-    preview = prompt[:400].replace("\n", " ")
-    return f"[DEMO LLM] Generated answer from prompt preview: {preview}..."
-
-
-def run_manual_demo(question: str | None = None, sample_files: list[str] | None = None) -> int:
-    files = sample_files or SAMPLE_FILES
-    query = question or "Summarize the key information from the loaded files."
-
-    print("=== Manual File Test ===")
-    print("Accepted file types: .md, .txt")
-    print("Input file list:")
-    for file_path in files:
-        print(f"  - {file_path}")
-
-    docs = load_documents_from_files(files)
-    if not docs:
-        print("\nNo valid input files were loaded.")
-        print("Create files matching the sample paths above, then rerun:")
-        print("  python3 main.py")
-        return 1
-
-    print(f"\nLoaded {len(docs)} documents")
-    for doc in docs:
-        print(f"  - {doc.id}: {doc.metadata['source']}")
-
-    load_dotenv(override=False)
-    provider = os.getenv(EMBEDDING_PROVIDER_ENV, "mock").strip().lower()
-    if provider == "local":
-        try:
-            embedder = LocalEmbedder(model_name=os.getenv("LOCAL_EMBEDDING_MODEL", LOCAL_EMBEDDING_MODEL))
-        except Exception:
-            embedder = _mock_embed
-    elif provider == "openai":
-        try:
-            embedder = OpenAIEmbedder(model_name=os.getenv("OPENAI_EMBEDDING_MODEL", OPENAI_EMBEDDING_MODEL))
-        except Exception:
-            embedder = _mock_embed
+    # Get query
+    if len(sys.argv) > 1:
+        query = " ".join(sys.argv[1:])
     else:
-        embedder = _mock_embed
+        query = "Minh Lai là ai?"
 
-    print(f"\nEmbedding backend: {getattr(embedder, '_backend_name', embedder.__class__.__name__)}")
+    print(f"\nQuery: {query}")
 
-    store = EmbeddingStore(collection_name="manual_test_store", embedding_fn=embedder)
-    store.add_documents(docs)
+    # Show retrieved chunks for transparency
+    print("\n--- Retrieved Chunks ---")
+    results = store.search(query, top_k=3)
+    for i, res in enumerate(results):
+        print(f"[{i+1}] Score={res['score']:.3f} | File={res['metadata'].get('original_file', 'N/A')}")
+        print(f"    {res['content'][:150].strip()}...")
+        print()
 
-    print(f"\nStored {store.get_collection_size()} documents in EmbeddingStore")
-    print("\n=== EmbeddingStore Search Test ===")
-    print(f"Query: {query}")
-    search_results = store.search(query, top_k=3)
-    for index, result in enumerate(search_results, start=1):
-        print(f"{index}. score={result['score']:.3f} source={result['metadata'].get('source')}")
-        print(f"   content preview: {result['content'][:120].replace(chr(10), ' ')}...")
-
-    print("\n=== KnowledgeBaseAgent Test ===")
-    agent = KnowledgeBaseAgent(store=store, llm_fn=demo_llm)
-    print(f"Question: {query}")
-    print("Agent answer:")
+    # Final answer
+    print("--- Answer ---")
     print(agent.answer(query, top_k=3))
-    return 0
-
-
-def main() -> int:
-    question = " ".join(sys.argv[1:]).strip() if len(sys.argv) > 1 else None
-    return run_manual_demo(question=question)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from .chunking import _dot
-from .embeddings import _mock_embed
+from .embeddings import _local_embed, _mock_embed
 from .models import Document
 
 
@@ -12,16 +12,16 @@ class EmbeddingStore:
     A vector store for text chunks.
 
     Tries to use ChromaDB if available; falls back to an in-memory store.
-    The embedding_fn parameter allows injection of mock embeddings for tests.
+    The embedding_fn parameter allows injection of real or mock embeddings.
     """
 
     def __init__(
         self,
         collection_name: str = "documents",
         embedding_fn: Callable[[str], list[float]] | None = None,
-        persist_directory: str | None = "data/chroma_db",
+        persist_directory: str | None = None,
     ) -> None:
-        self._embedding_fn = embedding_fn or _mock_embed
+        self._embedding_fn = embedding_fn or _local_embed
         self._collection_name = collection_name
         self._use_chroma = False
         self._store: list[dict[str, Any]] = []
@@ -33,11 +33,11 @@ class EmbeddingStore:
 
             if persist_directory:
                 self._client = chromadb.PersistentClient(path=persist_directory)
+                self._collection = self._client.get_or_create_collection(name=collection_name)
+                self._use_chroma = True
             else:
-                self._client = chromadb.EphemeralClient()
-
-            self._collection = self._client.get_or_create_collection(name=collection_name)
-            self._use_chroma = True
+                self._use_chroma = False
+                self._collection = None
         except (ImportError, Exception):
             self._use_chroma = False
             self._collection = None
