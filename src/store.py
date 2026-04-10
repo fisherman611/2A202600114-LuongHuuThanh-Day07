@@ -134,3 +134,32 @@ class EmbeddingStore:
         size_before = len(self._store)
         self._store = [r for r in self._store if r["metadata"].get("doc_id") != doc_id]
         return len(self._store) < size_before
+
+    def save(self, file_path: str) -> None:
+        """Save the in-memory store to a JSON file."""
+        if self._use_chroma:
+            print("Notice: 'save' is only for in-memory store. ChromaDB is already persistent.")
+            return
+
+        import json
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(self._store, f, ensure_ascii=False, indent=2)
+        print(f"Store saved to {file_path}")
+
+    def load(self, file_path: str) -> None:
+        """Load the in-memory store from a JSON file."""
+        if self._use_chroma:
+            print("Notice: 'load' is only for in-memory store.")
+            return
+
+        import json
+        import os
+
+        if not os.path.exists(file_path):
+            print(f"No store file found at {file_path}")
+            return
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            self._store = json.load(f)
+        print(f"Store loaded from {file_path} ({len(self._store)} records)")

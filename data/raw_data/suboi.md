@@ -29,11 +29,12 @@ Năm 2018, Suboi được kênh 88rising phát hành bài hát N-Sao?
 
 Hiện tại, cô đã lấy chồng và sinh con nên ít hoạt động âm nhạc nhưng vẫn là một rapper độc lập được yêu thích, năm 2020 cô trở thành huấn luận viên của chương trình Rap Việt.
 
-| Thông tin | Chi tiết|
-|------------|----------|
-| Tên thật | Nguyễn Ngọc Minh Huy |
-| Rapname + Nickname | Wowy<br>Lão Đại |
-| Nhóm/Tổ chức/Hãng đĩa - Thương hiệu | trước đây SouthGanZ |
-| Bạn bè/Đồng minh/Hợp tác | Karik, Nah, Lil Dekiing, Suboi, 95G, Rhymastic, Justatee, Lăng LD, Đông Nhi |
-| Đối thủ/Kẻ thù/Beef với | Torai9, Acy, The Night, ZinNine VD |
-| D.O.B | 27.9.1988 |
+| Thông tin                        | Chi tiết                                                                |
+|----------------------------------|-------------------------------------------------------------------------|
+| Tên thật                         | Hàng Lâm Trang Anh                                                      |
+| Rapname + Nickname              | Suboi                                                                   |
+| Nhóm/Tổ chức/Hãng đĩa - Thương hiệu | Suboi Entertainment (trước đây MusicFace, SD Records)                   |
+| Bạn bè/Đồng minh/Hợp tác        | Rapsoul, KrazyNoize, Đen Vâu, Wowy, Karik, JustaTee, Rhymastic          |
+| Đối thủ/Kẻ thù/Beef với         | không rõ                                                                |
+| D.O.B                            | 14.1.1990                                                               |
+| Thần tượng                      | Mos Def, Da Brat, Snoop Dogg, Aaliyah, Foxy Brown                      |
